@@ -1,0 +1,26 @@
+{
+  "name": "@adariari/vue3-keyregister",
+  "private": true,
+  "version": "0.1.7",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/key-register.cjs.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "path": "^0.12.7",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vite-plugin-dts": "^2.3.0",
+    "vue-tsc": "^1.4.2"
+  }
+}

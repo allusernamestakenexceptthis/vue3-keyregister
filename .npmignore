@@ -1,0 +1,5 @@
+**/*
+!dist/**/*
+!index.ts
+!LICENSE.md
+!README.md
