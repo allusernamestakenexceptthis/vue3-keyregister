@@ -4,7 +4,7 @@ Vue 3 plugin to register and unregister key sequences. rather than pressing keys
 
 ## installation
 
-```shell
+```bash
 npm install @adariari/vue3-keyregister
 ```
 
@@ -71,7 +71,7 @@ createApp(App)
 
 ### RegisterKeySequence
 
-```javascript
+```yml
 useKeyRegister().registerKeySequence (
     RegisteryProps: object
 )
@@ -94,7 +94,7 @@ callback also required
 
 keyIdentity can be used as identity only, or to specifiy key e.g.
 
-```json
+```yml
 keyIdentity: "c+c|my cc key"
 ```
 
@@ -102,7 +102,7 @@ this both sets key as c+c and use keyIdentity c+c|my cc key
 
 or you can set them separately:
 
-```json
+```yml
 key: "c+c",
 keyIdentity: "my cc key"
 ```
@@ -123,7 +123,7 @@ You can set options globally either in main or in any component using composable
 
 Available options:
 
-```json
+```yml
 // Timeout in milliseconds to wait for the next keypress
 timeout: 500,
 // Timeout in milliseconds to block key events after a key sequence is matched
