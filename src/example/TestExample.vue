@@ -1,8 +1,11 @@
 <script setup default lang="ts">
-    import { Ref, ref } from "vue";
+    import { Ref, ref, reactive, onUnmounted } from "vue";
     import { useKeyRegister } from "../components/index";
 
     const test2: Ref<string> = ref("");
+
+    const listenerString: {data: Array<string>} = reactive({data: Array('')});
+
     const { options } = useKeyRegister();
 
     //can set global timeout for all key sequences
@@ -16,11 +19,34 @@
     useKeyRegister().registerKeySequence({keyIdentity:"a+b|mykeys", callback:(presedKey: string) => {
             test2.value = presedKey ;
     }});
+
+    //test listeners
+    const listenerFunc = (pressedKey: Array<string>) => {
+        listenerString.data = [];
+        listenerString.data = Object.assign(listenerString.data, pressedKey);
+        console.log("listenerString.data", pressedKey);
+        if (pressedKey.join("") == "listen") {
+            listenerString.data.push("matched");
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    useKeyRegister().registerSequenceListener({listener: listenerFunc});
+
+    onUnmounted(() => {
+        useKeyRegister().unregisterKeySequence("a+a|mykeys");
+        useKeyRegister().unregisterKeySequence("a+b|mykeys");
+        useKeyRegister().unregisterSequenceListener(listenerFunc);
+    });
 </script>
 
 <template>
   <div>
-    {{  test2 }} test
+    {{ test2 }} test
+    <br/>
+    {{  listenerString.data }}
   </div>
 </template>
 
