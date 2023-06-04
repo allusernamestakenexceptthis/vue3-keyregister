@@ -117,6 +117,39 @@ This can unregister the sequence by keyIdentity, it will remove any registered k
 useKeyRegister().unregisterKeySequence("c+c|my cc key");
 ```
 
+### registerSequenceListener
+
+Register a listener for sequences, to customize action and process. return true if there is match or false if none
+
+```yml
+useKeyRegister().registerSequenceListener (
+    ListenProps: object
+)
+```
+
+ListenProps can accept following options:
+
+```javascript
+/*
+    @key options ListenerProps consists of 
+            listener a callback that should take 
+            (sequence : array<string> containing sequence of keys, lastEvent : KeyboardEvent) => boolean
+            Boolean value should be returned to indicate if the sequence is matched
+    @key Once if true, listener will be executed only once
+*/
+```
+
+### unregisterSequenceListener
+
+Unregister listener
+
+```javascript
+/*
+@param listener to be unregistered
+*/
+You should pass same function you passed to register listener
+
+
 ## Options
 
 You can set options globally either in main or in any component using composable
