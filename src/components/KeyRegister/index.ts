@@ -100,18 +100,26 @@ class KeyRegister {
         let key = '';
 
         if (event.metaKey || event.ctrlKey) {
-            key += 'ctrl+';
+            key += 'ctrl';
         }
 
         if (event.shiftKey) {
-            key += 'shift+';
+            key += 'shift';
         }
 
         if (event.altKey) {
-            key += 'alt+';
+            key += 'alt';
         }
 
-        key += event.key;
+        const keyPressed = (event.key)?event.key.toLowerCase():"";
+        
+        //to avoid adding modifier keys to key sequence twice
+        if (keyPressed !== 'control' && keyPressed !== 'shift' && keyPressed !== 'alt') {
+            if (key) {
+                key += '+';
+            }
+            key += keyPressed;
+        }
 
         return key;
     }
