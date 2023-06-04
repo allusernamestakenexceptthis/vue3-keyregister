@@ -10,7 +10,7 @@
 
     //can set once: true to unregister after first key sequence
     useKeyRegister().registerKeySequence({keyIdentity:"a+a|mykeys", once: true, callback:(presedKey: string) => {
-            test2.value = presedKey + "zz";
+            test2.value = presedKey;
     }});
 
     useKeyRegister().registerKeySequence({keyIdentity:"a+b|mykeys", callback:(presedKey: string) => {
