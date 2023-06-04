@@ -21,9 +21,14 @@ export default function useKeyRegister() {
     const registerKeySequence = KeyRegisterInstance.registerKeySequence.bind(KeyRegisterInstance);
     const unregisterKeySequence = KeyRegisterInstance.unregisterKeySequence.bind(KeyRegisterInstance);
 
+    const registerSequenceListener = KeyRegisterInstance.registerSequenceListener.bind(KeyRegisterInstance);
+    const unregisterSequenceListener = KeyRegisterInstance.unregisterSequenceListener.bind(KeyRegisterInstance);
+
     return {
         registerKeySequence,
         unregisterKeySequence,
+        registerSequenceListener,
+        unregisterSequenceListener,
         options: keyRegisterOptions
     }
 }

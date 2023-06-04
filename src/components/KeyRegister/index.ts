@@ -11,6 +11,11 @@ interface RegistryProps {
     once: boolean,
 }
 
+interface ListenerProps {
+    listener: Function,
+    once: boolean,
+}
+
 
 class KeyRegister {
 
@@ -25,6 +30,9 @@ class KeyRegister {
     /*** Private properties ****/
     // Registry of key sequences
     private keyRegistry: Array<RegistryProps> = [];
+
+    // Registry of key listeners
+    private keyListeners: Array<ListenerProps> = [];
 
     // History of keys pressed
     private keyHistory: Array<string> = [];
@@ -44,7 +52,9 @@ class KeyRegister {
             window.removeEventListener('keydown', (this, this.keyHandler));
             window.addEventListener('keydown', (this, this.keyHandler));
         })
-        onUnmounted(() => window.removeEventListener('keydown', (this, this.keyHandler)))
+        onUnmounted(() => {
+            window.removeEventListener('keydown', (this, this.keyHandler));
+        })
     }
 
     /**
@@ -88,6 +98,30 @@ class KeyRegister {
      */
     unregisterKeySequence(keyIdentity: string) {
         this.keyRegistry = this.keyRegistry.filter((item) => item.keyIdentity !== keyIdentity);
+    }
+
+
+    /**
+     * Register listener to freely observe sequences
+     * 
+     * @key options ListenerProps consists of 
+     *        listener a callback that should take 
+     *        (sequence : array<string>, lastEvent : KeyboardEvent) => boolean
+     *        Boolean value should be returned to indicate if the sequence is matched
+     * @key Once if true, listener will be executed only once
+     */
+    registerSequenceListener(options: ListenerProps|any) {
+        this.keyListeners.push(options);
+    }
+
+    /**
+     * Unregister listener
+     * 
+     * @param listener to be unregistered
+     * @returns void
+     */
+    unregisterSequenceListener(listener: Function) {
+        this.keyListeners = this.keyListeners.filter((item) => item.listener !== listener);
     }
 
     /**
@@ -155,6 +189,16 @@ class KeyRegister {
         if (this.blockingTimeoutId) {
             return;
         }
+
+        this.keyListeners.forEach((item) => {
+            if (item.listener(this.keyHistory, event)) {
+                actionPerformed = true;
+                if (item.once) {
+                    this.unregisterSequenceListener(item.listener);
+                }
+            }
+        });
+
         this.keyRegistry.forEach((item) => {
             if (targetKey.indexOf(item.key) !==-1) {
                 if (item.validateTargetCallback !== undefined) {
@@ -169,11 +213,12 @@ class KeyRegister {
                 if (item.once) {
                     this.unregisterKeySequence(item.keyIdentity);
                 }
-                this.blockingTimeoutId = setTimeout(() => {
-                    this.blockingTimeoutId = null;
-                }, this.blockingDelay);
             }
         });
+
+        this.blockingTimeoutId = setTimeout(() => {
+            this.blockingTimeoutId = null;
+        }, this.blockingDelay);
 
         if (actionPerformed) {
             event.preventDefault();
